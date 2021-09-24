@@ -38,7 +38,8 @@ main * {
 
 
 button {
-  grid-column: span 3;
+  justify-self: center;
+  width: 15vmin;
   margin: 2vmin;
   background-color: white;
   color: black;

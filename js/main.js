@@ -15,7 +15,7 @@ const cResultEl = document.getElementById('c-result');
 /*----- event listeners -----*/
 // call the function named handleClick
 // when the btn is clicked
-document.querySelector('button')
+document.querySelector('main')
   .addEventListener('click', handleClick);
 
 
@@ -54,9 +54,10 @@ function render() {
 // The responsibility of responding to user 
 // interaction, is to update all impacted
 // state, then call render
-function handleClick() {
+function handleClick(evt) {
+  if (evt.target.tagName !== 'BUTTON') return;
   // randomly generate results for p & c
-  results.p = getRandomRPS();
+  results.p = evt.target.textContent.toLowerCase();
   results.c = getRandomRPS();
   // determine the winner
   if (results.c === results.p) {
