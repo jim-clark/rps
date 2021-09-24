@@ -1,10 +1,9 @@
 /*----- constants -----*/
 const rpsLookup = {
-  r: 'imgs/rock.png',
-  p: 'imgs/paper.png',
-  s: 'imgs/scissors.png'
+  r: {imgPath: 'imgs/rock.png', beats: 's'},
+  p: {imgPath: 'imgs/paper.png', beats: 'r'},
+  s: {imgPath: 'imgs/scissors.png', beats: 'p'},
 };
-
 
 /*----- app's state (variables) -----*/
 let scores, results, winner;
@@ -29,6 +28,7 @@ function init() {
     c: 0,
     t: 0
   };
+
   // r = rock, p = paper & s = scissors
   results = {
     p: 'r',
@@ -45,11 +45,34 @@ function render() {
     const scoreEl = document.getElementById(`${scoreKey}-score`);
     scoreEl.innerHTML = scores[scoreKey];
   }
-  pResultEl.src = rpsLookup[results.p];
-  cResultEl.src = rpsLookup[results.c];
+  pResultEl.src = rpsLookup[results.p].imgPath;
+  cResultEl.src = rpsLookup[results.c].imgPath;
+  pResultEl.style.borderColor = winner === 'p' ? 'grey' : 'white';
+  cResultEl.style.borderColor = winner === 'c' ? 'grey' : 'white';
 }
 
+// The responsibility of responding to user 
+// interaction, is to update all impacted
+// state, then call render
 function handleClick() {
-  console.log('clicked')
+  // randomly generate results for p & c
+  results.p = getRandomRPS();
+  results.c = getRandomRPS();
+  // determine the winner
+  if (results.c === results.p) {
+    winner = 't';
+  } else if (rpsLookup[results.c].beats === results.p) {
+    winner = 'c';
+  } else {
+    winner = 'p';
+  }
+  // update the scores object
+  scores[winner]++;
+  render();
+}
+
+function getRandomRPS() {
+  const idx = Math.floor(Math.random() * 3);
+  return ['r', 'p', 's'][idx];
 }
 
