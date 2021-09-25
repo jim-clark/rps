@@ -5,12 +5,15 @@ const rpsLookup = {
   s: {imgPath: 'imgs/scissors.png', beats: 'p'},
 };
 
+const GOAL_COUNT = 3;
+
 /*----- app's state (variables) -----*/
-let scores, results, winner;
+let scores, results, winner, goalMet;
 
 /*----- cached element references -----*/
 const pResultEl = document.getElementById('p-result');
 const cResultEl = document.getElementById('c-result');
+const msgEl = document.querySelector('h1');
 
 /*----- event listeners -----*/
 // call the function named handleClick
@@ -36,6 +39,7 @@ function init() {
   };
   // p = player, c = computer, t = tie, 
   winner = 't';
+  goalMet = '';
   render();
 }
 
@@ -49,6 +53,7 @@ function render() {
   cResultEl.src = rpsLookup[results.c].imgPath;
   pResultEl.style.borderColor = winner === 'p' ? 'grey' : 'white';
   cResultEl.style.borderColor = winner === 'c' ? 'grey' : 'white';
+  msgEl.textContent = goalMet ? `Goal Met By ${goalMet === 'p' ? 'PLAYER' : 'COMPUTER'}` : 'ROCK PAPER SCISSORS';
 }
 
 // The responsibility of responding to user 
@@ -69,6 +74,7 @@ function handleClick(evt) {
   }
   // update the scores object
   scores[winner]++;
+  goalMet = scores[winner] === GOAL_COUNT ? winner : '';
   render();
 }
 
