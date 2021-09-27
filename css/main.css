@@ -36,7 +36,6 @@ main * {
   padding: 2vmin;
 }
 
-
 button {
   justify-self: center;
   width: 15vmin;
@@ -52,5 +51,17 @@ button {
 button:hover {
   background-color: black;
   color: white;
+}
+
+#countdown {
+  visibility: hidden;
+  height: 10vmin;
+  width: 10vmin;
+  border: 1vmin solid grey;
+  border-radius: 50%;
+  font-size: 5vmin;
+  padding: 1vmin;
+  justify-self: center;
+  align-self: center;
 }
 

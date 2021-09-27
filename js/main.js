@@ -6,6 +6,7 @@ const rpsLookup = {
 };
 
 const GOAL_COUNT = 3;
+countdownAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 
 /*----- app's state (variables) -----*/
 let scores, results, winner, goalMet;
@@ -13,6 +14,7 @@ let scores, results, winner, goalMet;
 /*----- cached element references -----*/
 const pResultEl = document.getElementById('p-result');
 const cResultEl = document.getElementById('c-result');
+const countdownEl = document.getElementById('countdown');
 const msgEl = document.querySelector('h1');
 
 /*----- event listeners -----*/
@@ -64,18 +66,37 @@ function handleClick(evt) {
   // randomly generate results for p & c
   results.p = evt.target.textContent.toLowerCase();
   results.c = getRandomRPS();
-  // determine the winner
-  if (results.c === results.p) {
-    winner = 't';
-  } else if (rpsLookup[results.c].beats === results.p) {
-    winner = 'c';
-  } else {
-    winner = 'p';
-  }
-  // update the scores object
-  scores[winner]++;
-  goalMet = scores[winner] === GOAL_COUNT ? winner : '';
-  render();
+  doCountdown(function() {
+    // determine the winner
+    if (results.c === results.p) {
+      winner = 't';
+    } else if (rpsLookup[results.c].beats === results.p) {
+      winner = 'c';
+    } else {
+      winner = 'p';
+    }
+    // update the scores object
+    scores[winner]++;
+    goalMet = scores[winner] === GOAL_COUNT ? winner : '';
+    render();
+  });
+}
+
+function doCountdown(cb) {
+  let count = 3;
+  countdownEl.textContent = count;
+  countdownEl.style.visibility = 'visible';
+  countdownAudio.play();
+  const timerId = setInterval(function () {
+    count--;
+    if (count <= 0) {
+      clearInterval(timerId);
+      countdownEl.style.visibility = 'hidden';
+      cb();
+    } else {
+      countdownEl.textContent = count;
+    }
+  }, 1000);
 }
 
 function getRandomRPS() {
